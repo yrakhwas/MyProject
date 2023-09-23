@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyProject.Data.Entities;
+using MyProject.Data.Helpers;
 
 namespace MyProject.Data
 {
@@ -7,13 +8,14 @@ namespace MyProject.Data
     {
         public FoodShopDbContext()
         {
-            this.Database.EnsureCreated();
+            //this.Database.EnsureCreated();
         }
         public DbSet<Establishment> establishments { get; set; }
         public DbSet<Ingridient> ingridients { get; set;}
         public DbSet<Pizza> pizza { get; set; }
         public DbSet<Salad> salads { get; set; }
         public DbSet<Sushi> sushi { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
@@ -73,6 +75,13 @@ namespace MyProject.Data
             modelBuilder.Entity<Pizza>().HasMany(p => p.ingridients).WithMany(p => p.pizzas);
             modelBuilder.Entity<Sushi>().HasMany(s => s.ingridients).WithMany(s => s.sushis);
             modelBuilder.Entity<Salad>().HasMany(sal => sal.ingridients).WithMany(sal => sal.salads);
+
+            modelBuilder.SeedEstablishment();
+            modelBuilder.SeedIngridients();
+            modelBuilder.SeedPizza();
+            modelBuilder.SeedSalad();
+            modelBuilder.SeedSushi();
+
         }
 
     }

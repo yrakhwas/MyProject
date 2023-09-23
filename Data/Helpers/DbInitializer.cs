@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyProject.Data.Entities;
+using static MyProject.Data.FoodShopDbContext;
 
 namespace MyProject.Data.Helpers
 {
     public static class DbInitializer
     {
-        public static void SeedUsers(this ModelBuilder modelBuilder)
+        public static void SeedEstablishment(this ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Establishment>().HasData(new Establishment[]
             {
@@ -69,33 +70,59 @@ namespace MyProject.Data.Helpers
             {
                 new Pizza
                 {
-                    Name = "Pizza_1",
-                    Price = 1
+                    Name = "Neapolitana",
+                    ingridients = new List<Ingridient>
+                    {
+                        new Ingridient
+                        {
+                            Name = "Tomato Sauce",
+                            Price = 1
+                        },
+                        new Ingridient
+                        {
+                            Name = "Sausage",
+                            Price = 2
+                        },
+                        new Ingridient
+                        {
+                            Name = "Proshutto",
+                            Price = 3
+                        }
+                    },
+                    Price = CalculateDishPrice(new List<Ingridient>
+                    {
+                        new Ingridient{Name = "Tomato Sauce",Price = 1},
+                        new Ingridient{Name = "Sausage",Price = 2},
+                        new Ingridient{Name = "Proshutto",Price = 3}
+                    })
                 },
                 new Pizza
                 {
-                    Name = "Pizza_2",
-                    Price = 2
-                },
-                new Pizza
-                {
-                    Name = "Pizza_3",
-                    Price = 3
-                },
-                new Pizza
-                {
-                    Name = "Pizza_4",
-                    Price = 4
-                },
-                new Pizza
-                {
-                    Name = "Pizza_5",
-                    Price = 5
-                },
-                new Pizza
-                {
-                    Name = "Pizza_6",
-                    Price = 6
+                    Name = "Neapolitana-2",
+                    ingridients = new List<Ingridient>
+                    {
+                        new Ingridient
+                        {
+                            Name = "Tomato Sauce",
+                            Price = 2
+                        },
+                        new Ingridient
+                        {
+                            Name = "Pork",
+                            Price = 3
+                        },
+                        new Ingridient
+                        {
+                            Name = "Mushrooms",
+                            Price = 2
+                        }
+                    },
+                    Price = CalculateDishPrice(new List<Ingridient>
+                    {
+                        new Ingridient{Name = "Tomato Sauce",Price = 2},
+                        new Ingridient{Name = "Pork",Price = 3},
+                        new Ingridient{Name = "Mushrooms",Price = 2}
+                    })
                 }
             });
         }
@@ -105,33 +132,59 @@ namespace MyProject.Data.Helpers
             {
                 new Salad
                 {
-                    Name = "Salad_1",
-                    Price = 1
+                    Name = "Cesair",
+                    ingridients = new List<Ingridient>
+                    {
+                        new Ingridient
+                        {
+                            Name = "Chicken",
+                            Price = 2
+                        },
+                        new Ingridient
+                        {
+                            Name = "Feta",
+                            Price = 5
+                        },
+                        new Ingridient
+                        {
+                            Name = "Olives",
+                            Price = 5
+                        }
+                    },
+                    Price = CalculateDishPrice(new List<Ingridient>
+                    {
+                        new Ingridient{Name = "Chicken",Price = 2},
+                        new Ingridient{Name = "Feta",Price = 5},
+                        new Ingridient{Name = "Olives",Price = 5}
+                    })
                 },
                 new Salad
                 {
-                    Name = "Salad_2",
-                    Price = 2
-                },
-                new Salad
-                {
-                    Name = "Salad_3",
-                    Price = 3
-                },
-                new Salad
-                {
-                    Name = "Salad_4",
-                    Price = 4
-                },
-                new Salad
-                {
-                    Name = "Salad_5",
-                    Price = 5
-                },
-                new Salad
-                {
-                    Name = "Salad_6",
-                    Price = 6
+                    Name = "King",
+                    ingridients = new List<Ingridient>
+                    {
+                        new Ingridient
+                        {
+                            Name = "Brokkoli",
+                            Price = 3
+                        },
+                        new Ingridient
+                        {
+                            Name = "Colour cabbage",
+                            Price = 2
+                        },
+                        new Ingridient
+                        {
+                            Name = "Carrot",
+                            Price = 1
+                        }
+                    },
+                    Price = CalculateDishPrice(new List<Ingridient>
+                    {
+                        new Ingridient{Name = "Brokkoli",Price = 3},
+                        new Ingridient{Name = "Colour cabbage",Price = 2},
+                        new Ingridient{Name = "Carrot",Price = 1}
+                    })
                 }
             });
         }
@@ -141,35 +194,84 @@ namespace MyProject.Data.Helpers
             {
                 new Sushi
                 {
-                    Name = "Sushi_1",
-                    Price = 1
+                    Name = "Dragon",
+                    ingridients = new List<Ingridient>
+                    {
+                        new Ingridient
+                        {
+                            Name = "Salmon",
+                            Price = 7
+                        },
+                        new Ingridient
+                        {
+                            Name = "Rise",
+                            Price = 1
+                        },
+                        new Ingridient
+                        {
+                            Name = "Tune",
+                            Price = 5
+                        },
+                        new Ingridient
+                        {
+                            Name = "Sesame",
+                            Price= 6
+                        }
+                    },
+                    Price = CalculateDishPrice(new List<Ingridient>
+                    {
+                        new Ingridient{Name = "Salmon",Price = 7},
+                        new Ingridient{Name = "Rise",Price = 1 },
+                        new Ingridient{Name = "Tune",Price = 5},
+                        new Ingridient{Name = "Sesame",Price = 6}
+                    })
                 },
                 new Sushi
                 {
-                    Name = "Sushi_2",
-                    Price = 2
-                },
-                new Sushi
-                {
-                    Name = "Sushi_3",
-                    Price = 3
-                },
-                new Sushi
-                {
-                    Name = "Sushi_4",
-                    Price = 4
-                },
-                new Sushi
-                {
-                    Name = "Sushi_5",
-                    Price = 5
-                },
-                new Sushi
-                {
-                    Name = "Sushi_6",
-                    Price = 6
+                    Name = "Gold Dragon",
+                    ingridients = new List<Ingridient>
+                    {
+                        new Ingridient
+                        {
+                            Name = "Salmon",
+                            Price = 7
+                        },
+                        new Ingridient
+                        {
+                            Name = "Rise",
+                            Price = 1
+                        },
+                        new Ingridient
+                        {
+                            Name = "Tune",
+                            Price = 5
+                        },
+                        new Ingridient
+                        {
+                            Name = "Sesame",
+                            Price= 6
+                        },
+                        new Ingridient
+                        {
+                            Name = "Cucumber",
+                            Price= 4
+                        }
+                    },
+                    Price = CalculateDishPrice(new List<Ingridient>
+                    {
+                        new Ingridient{Name = "Salmon",Price = 7},
+                        new Ingridient{Name = "Rise",Price = 1 },
+                        new Ingridient{Name = "Tune",Price = 5},
+                        new Ingridient{Name = "Sesame",Price = 6},
+                        new Ingridient{Name = "Cucumber",Price = 4}
+                    })
+
                 }
             });
+        }
+        public static decimal CalculateDishPrice(List<Ingridient> ingridients)
+        {
+            return ingridients.Sum(ingridient => ingridient.Price);
         }
     }
 }
