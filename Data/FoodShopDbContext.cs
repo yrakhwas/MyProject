@@ -8,7 +8,7 @@ namespace MyProject.Data
     {
         public FoodShopDbContext()
         {
-            //this.Database.EnsureCreated();
+           // this.Database.EnsureCreated();
         }
         public DbSet<Establishment> establishments { get; set; }
         public DbSet<Ingridient> ingridients { get; set;}
@@ -31,11 +31,14 @@ namespace MyProject.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+
             modelBuilder.Entity<Establishment>().HasKey(e => e.Id);
             modelBuilder.Entity<Establishment>().Property(e => e.Id).ValueGeneratedOnAdd().UseIdentityColumn();
             modelBuilder.Entity<Establishment>().Property(e => e.Name).IsRequired();
             modelBuilder.Entity<Establishment>().Property(e => e.Adress).IsRequired();
-
+            modelBuilder.Entity<PizzaIngridient>()
+        .HasKey(pi => new { pi.PizzaId, pi.IngridientId });
 
 
 
@@ -75,6 +78,17 @@ namespace MyProject.Data
             modelBuilder.Entity<Pizza>().HasMany(p => p.ingridients).WithMany(p => p.pizzas);
             modelBuilder.Entity<Sushi>().HasMany(s => s.ingridients).WithMany(s => s.sushis);
             modelBuilder.Entity<Salad>().HasMany(sal => sal.ingridients).WithMany(sal => sal.salads);
+
+
+            modelBuilder.Entity<PizzaIngridient>()
+        .HasOne(pi => pi.Pizza)
+        .WithMany(p => p.PizzaIngridients)
+        .HasForeignKey(pi => pi.PizzaId);
+
+    modelBuilder.Entity<PizzaIngridient>()
+        .HasOne(pi => pi.Ingridient)
+        .WithMany(i => i.PizzaIngridients)
+        .HasForeignKey(pi => pi.IngridientId);
 
             modelBuilder.SeedEstablishment();
             modelBuilder.SeedIngridients();
