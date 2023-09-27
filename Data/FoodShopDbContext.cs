@@ -15,6 +15,10 @@ namespace MyProject.Data
         public DbSet<Pizza> pizza { get; set; }
         public DbSet<Salad> salads { get; set; }
         public DbSet<Sushi> sushi { get; set; }
+        public DbSet<PizzaIngridient> pizzaIngridients { get; set; }
+        public DbSet<SushiIngridient> sushiIngridients { get; set; }
+        public DbSet<SaladIngridient> saladIngridients { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -47,6 +51,14 @@ namespace MyProject.Data
             modelBuilder.Entity<Ingridient>().Property(i => i.Name).IsRequired();
             modelBuilder.Entity<Ingridient>().Property(i => i.Price).IsRequired();
 
+            modelBuilder.Entity<Establishment>().HasMany(e => e.pizzas);
+            modelBuilder.Entity<Establishment>().HasMany(e => e.salads);
+            modelBuilder.Entity<Establishment>().HasMany(e => e.sushis);
+
+
+            modelBuilder.Entity<Ingridient>().HasMany(i => i.pizzas);
+            modelBuilder.Entity<Ingridient>().HasMany(i => i.salads);
+            modelBuilder.Entity<Ingridient>().HasMany(i => i.sushis);
 
             modelBuilder.Entity<Pizza>().HasKey(p => p.Id);
             modelBuilder.Entity<Pizza>().Property(p => p.Id).ValueGeneratedOnAdd().UseIdentityColumn();
@@ -66,36 +78,40 @@ namespace MyProject.Data
             modelBuilder.Entity<Sushi>().Property(p => p.Price).IsRequired();
 
 
-            modelBuilder.Entity<Establishment>().HasMany(e => e.pizzas);
-            modelBuilder.Entity<Establishment>().HasMany(e => e.salads);
-            modelBuilder.Entity<Establishment>().HasMany(e => e.sushis);
 
 
-            modelBuilder.Entity<Ingridient>().HasMany(i => i.pizzas);
-            modelBuilder.Entity<Ingridient>().HasMany(i => i.salads);
-            modelBuilder.Entity<Ingridient>().HasMany(i => i.sushis);
-
-            modelBuilder.Entity<Pizza>().HasMany(p => p.ingridients).WithMany(p => p.pizzas);
+            modelBuilder.Entity<Pizza>()
+                        .HasMany(p => p.ingridients)
+                        .WithMany(i => i.pizzas)
+                        .UsingEntity<PizzaIngridient>(
+                            j => j
+                                .HasOne(pi => pi.Ingridient)
+                                .WithMany()
+                                .HasForeignKey(pi => pi.IngridientId),
+                            j => j
+                                .HasOne(pi => pi.Pizza)
+                                .WithMany()
+                                .HasForeignKey(pi => pi.PizzaId),
+                            j =>
+                            {
+                                j.HasKey(pi => new { pi.PizzaId, pi.IngridientId });
+                                j.ToTable("PizzaIngridients");
+                            });
             modelBuilder.Entity<Sushi>().HasMany(s => s.ingridients).WithMany(s => s.sushis);
             modelBuilder.Entity<Salad>().HasMany(sal => sal.ingridients).WithMany(sal => sal.salads);
 
-
-            modelBuilder.Entity<PizzaIngridient>()
-        .HasOne(pi => pi.Pizza)
-        .WithMany(p => p.PizzaIngridients)
-        .HasForeignKey(pi => pi.PizzaId);
-
-    modelBuilder.Entity<PizzaIngridient>()
-        .HasOne(pi => pi.Ingridient)
-        .WithMany(i => i.PizzaIngridients)
-        .HasForeignKey(pi => pi.IngridientId);
+            modelBuilder.Entity<PizzaIngridient>().HasKey(pizin => new { pizin.PizzaId, pizin.IngridientId });
+            modelBuilder.Entity<SushiIngridient>().HasKey(suchin => new { suchin.SushiId, suchin.IngridientId });
+            modelBuilder.Entity<SaladIngridient>().HasKey(salin => new { salin.SaladId, salin.IngridientId });
 
             modelBuilder.SeedEstablishment();
             modelBuilder.SeedIngridients();
             modelBuilder.SeedPizza();
             modelBuilder.SeedSalad();
             modelBuilder.SeedSushi();
-
+            modelBuilder.SeedPizzaIngridients();
+            modelBuilder.SeedSushiIngridients();
+            modelBuilder.SeedSaladIngridients();
         }
 
     }

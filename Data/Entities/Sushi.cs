@@ -7,6 +7,7 @@
         public decimal Price { get; set; }
         public ICollection<Ingridient> ingridients { get; set; }
         public ICollection<Establishment>? establishments { get; set; }
+        public ICollection<SushiIngridient> SushiIngridients { get; set; }
         public Sushi()
         {
             ingridients = new List<Ingridient>();
