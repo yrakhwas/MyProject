@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MyProject.Data;
 using Microsoft.AspNetCore.Identity;
+using DataAccess1.Data.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +12,7 @@ builder.Services.AddControllersWithViews();
 string connStr = builder.Configuration.GetConnectionString("LocalDb");
 builder.Services.AddDbContext<FoodShopDbContext>(opts=>opts.UseSqlServer(connStr));
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<FoodShopDbContext>();
+builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<FoodShopDbContext>();
 
 
 
