@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MyProject.Data;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,8 @@ builder.Services.AddControllersWithViews();
 
 string connStr = builder.Configuration.GetConnectionString("LocalDb");
 builder.Services.AddDbContext<FoodShopDbContext>(opts=>opts.UseSqlServer(connStr));
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<FoodShopDbContext>();
 
 
 
@@ -28,6 +31,10 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+
+app.MapRazorPages();//for using identity pages
+
 
 app.MapControllerRoute(
     name: "default",
